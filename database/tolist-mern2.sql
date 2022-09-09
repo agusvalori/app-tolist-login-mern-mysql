@@ -1,0 +1,1 @@
+UPDATE persona SET nombre="Esteban" WHERE id_persona=13inmuebleinmueblepropietario
