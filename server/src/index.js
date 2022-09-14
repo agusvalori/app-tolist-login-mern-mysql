@@ -6,8 +6,10 @@ import indexRoutes from "./routes/index.routes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
 
+import cookieParser from "cookie-parser";
 import passport from "passport";
 import session from "express-session";
+import csurf from "csurf";
 import MySQLStore from "express-mysql-session";
 
 import "./lib/PassportLocalStrategy.js";
@@ -17,14 +19,16 @@ const app = express();
 
 //Middlewares
 app.use(morgan("dev"));
-app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+//app.use(cookieParser("mi secretro vendo descartables"));
 app.use(cors());
 
 //Session configuracion
+
 app.use(
   session({
-    secret: "lainez17",
+    secret: "mi secretro vendo descartables",
     resave: true,
     saveUninitialized: true,
     store: new MySQLStore({
@@ -38,11 +42,10 @@ app.use(
   })
 );
 
+
 //Passport configuracion
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 
 //Routes
 app.use(indexRoutes);

@@ -6,17 +6,21 @@ import { HomePage } from "./components/pages/home/HomePage";
 import { NotFound } from "./components/pages/NotFound";
 import { TareasPage } from "./components/pages/tareas/tareasPage";
 import { TareaContextProvider } from "./data/TareaContext";
+import { UsuarioContextProvider } from "./data/UsuarioContext";
 
 export const App = () => {
   return (
-    <TareaContextProvider>
+    <UsuarioContextProvider>
       <NavBar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/task" element={<TareasPage />} />
-        <Route path="/about" element={<About />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+
+      <TareaContextProvider>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/task" element={<TareasPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </TareaContextProvider>
+    </UsuarioContextProvider>
   );
 };

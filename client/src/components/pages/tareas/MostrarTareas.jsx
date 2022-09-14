@@ -3,8 +3,8 @@ import { Paper, Typography, Box, IconButton } from "@mui/material";
 import { HighlightOffOutlined, EditOutlined } from "@mui/icons-material";
 import { useTasks } from "../../../data/TareaContext";
 
-export const MostrarTareas = () => {
-  const {tareas, eliminarTareas, editarTareas}=useTasks()
+export const MostrarTareas = ({setValues}) => {
+  const {tareas, eliminarTareas}=useTasks()
   
   return (
     <Paper sx={{ padding: "10px", margin: "10px" }}>
@@ -47,7 +47,7 @@ export const MostrarTareas = () => {
                 <IconButton onClick={()=>eliminarTareas(task.id)}>
                   <HighlightOffOutlined color="warning" />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={()=>setValues({...task,createdAt:task.createdAt.split(".")[0]})}>
                   <EditOutlined color="info" />
                 </IconButton>
               </Box>

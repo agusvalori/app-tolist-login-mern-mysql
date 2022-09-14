@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTasks } from "../../../data/TareaContext";
 import { CrearTareas } from "./CrearTareas";
 import { MostrarTareas } from "./MostrarTareas";
 
 export const TareasPage = () => {
-  const { obtenerTareas } = useTasks();    
+  const { obtenerTareas } = useTasks(); 
+  let currentDate = new Date()
+  
+  const initialValues={title:"",description:"",createdAt:currentDate.toISOString().split(".")[0]}
+  const [values, setValues] = useState(initialValues)   
 
   useEffect(() => {
     obtenerTareas();
@@ -14,12 +18,12 @@ export const TareasPage = () => {
     <div>
       <section>
         <div>
-          <CrearTareas/>
+          <CrearTareas values={values} setValues={setValues} initialValues={initialValues} />
         </div>
       </section>
       <section>
         <div>
-          <MostrarTareas />
+          <MostrarTareas setValues={setValues} />
         </div>
       </section>
     </div>

@@ -14,19 +14,18 @@ const useTasks = () => {
 const TareaContextProvider = (props) => {
   const [tareas, setTareas] = useState([]);
 
-  const obtenerTareas = async () => {    
+  const obtenerTareas = async () => {
     try {
-      const result = await axios.get("http://localhost:4000/task")
+      const result = await axios.get("http://localhost:4000/task");
       setTareas(result.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const agregarTareas = async (values, actions) => {
+  const agregarTareas = async (values) => {
     try {
       await axios.post("http://localhost:4000/task", values);
-      actions.resetForm();
       obtenerTareas();
     } catch (error) {
       console.log(error);
@@ -43,16 +42,28 @@ const TareaContextProvider = (props) => {
     }
   };
 
-  
-  const editarTareas = () => {
+  const editarTareas = async (values) => {
     try {
+      if (confirm("Esta seguro que quiere editar la tarea")) {
+        await axios.put(`http://localhost:4000/task/${values.id}`, values);
+        obtenerTareas();
+      }
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   return (
-    <TareaContext.Provider value={{tareas,setTareas,obtenerTareas, agregarTareas, eliminarTareas,editarTareas}}>
+    <TareaContext.Provider
+      value={{
+        tareas,
+        setTareas,
+        obtenerTareas,
+        agregarTareas,
+        eliminarTareas,
+        editarTareas,
+      }}
+    >
       {props.children}
     </TareaContext.Provider>
   );

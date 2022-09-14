@@ -17,4 +17,11 @@ HelpersCrypt.comparePassword = async (password, passwordDb) => {
   }
 };
 
+
+HelpersCrypt.desencryptPassword = async (passwordDb) => {  
+  const decode = await bcryptjs.decodeBase64(passwordDb, 10)  
+  return decode;
+};
+
+
 export { HelpersCrypt };

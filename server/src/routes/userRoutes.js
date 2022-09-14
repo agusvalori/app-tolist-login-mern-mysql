@@ -4,29 +4,22 @@ import { iniciarSesionUsuario, registrarUsuario } from "../data/userData.js";
 import { isLoggedIn, isNotLoggedIn } from "../lib/isLoggedIn.js";
 const userRoutes = Router();
 
-userRoutes.get("/login", (req, res) => {
-  if (isNotLoggedIn) {
-    res.json({ message: "login: usuario No logeado" });
-  } else {
-    res.json({ message: "login: usuario logeado" });
-  }
+userRoutes.get("/signin", (req, res) => {
+  console.log(req.user);
+  console.log(req.session);
+  console.log(req.isAuthenticated());
+  console.log("Cookies: ", req.cookies);
+  console.log("Signed Cookies: ", req.signedCookies);
+  res.send("Aca estamos viendo que hacer");
 });
 
 userRoutes.post("/signin", iniciarSesionUsuario);
 
 userRoutes.post("/signup", registrarUsuario);
 
-
 userRoutes.get("/profile", (req, res) => {
-    if(isLoggedIn){
-        res.send("profile: Usuario logeado")
-    }else{
-        res.send("Profile: Usuario no logeado")
-    }
-});
-
-userRoutes.post("/profile", isLoggedIn, (req, res) => {
-  res.json({ message: "Profile: hola pepe" });
+  console.log(req.isAuthenticated());
+  res.json({ message: "Profile: hola pepe get" });
 });
 
 userRoutes.get("/logout", (req, res) => {

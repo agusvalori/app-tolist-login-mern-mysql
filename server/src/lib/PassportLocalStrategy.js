@@ -12,24 +12,28 @@ passport.use(
       passwordField: "password",
       passReqToCallback: true,
     },
-    async (req,username, password, done) => {
+    async (req, username, password, done) => {
       const [rows] = await pool.query("SELECT * FROM users WHERE username=?", [
         username,
       ]);
-      
 
+      
       if (rows.length > 0) {
-        const user = rows[0];
+        const user = rows[0];        
         const validPassword = await HelpersCrypt.comparePassword(
           password,
           user.password
         );
-        if (validPassword) {
-          done(null, user);          
+        
+        if (validPassword === true) {        
+          console.log("Usuario correcto");
+          return done(null, user);
         } else {
-          done(null, false);
+          console.log("Clave invalida");
+          return done(null, false);
         }
-      } else {        
+      } else {
+        console.log("Usuario invalido");
         return done(null, false);
       }
     }
@@ -59,17 +63,20 @@ passport.use(
         user.id = result.insertId;
         return done(null, user);
       } catch (error) {
-        console.error(error.message);
+        console.log("Error PassportLocalStrategy");
+        return done(null, error);
       }
     }
   )
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  console.log("serializeUser", user)
+  done(null, user);
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log("deserializeUser")
   const rows = await pool.query("SELECT * FROM users WHERE id=?", [id]);
   done(null, rows[0]);
 });
