@@ -3,7 +3,7 @@ import { pool } from "./db.js";
 
 const iniciarSesionUsuario = (req, res, next) => {  
   passport.authenticate("local.signin", {
-    successReturnToOrRedirect: "/signin",
+    successReturnToOrRedirect: "/profile",
     failureRedirect: "/signin",    
     failureMessage: true,
   })(req, res, next)

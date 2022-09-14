@@ -3,6 +3,20 @@ import { Strategy } from "passport-local";
 import { pool } from "../data/db.js";
 import { HelpersCrypt } from "./HelpersCrypt.js";
 
+
+
+passport.serializeUser((user, done) => {
+  console.log("serializeUser");
+  done(null, user);
+});
+
+passport.deserializeUser(async (id, done) => {
+  console.log("deserializeUser");
+  const rows = await pool.query("SELECT * FROM users WHERE id=?", [id]);
+  done(null, rows[0]);
+});
+
+
 //Iniciar Sesion
 passport.use(
   "local.signin",
@@ -12,21 +26,20 @@ passport.use(
       passwordField: "password",
       passReqToCallback: true,
     },
-    async (req, username, password, done) => {
+    async (req,username, password, done) => {
       const [rows] = await pool.query("SELECT * FROM users WHERE username=?", [
         username,
       ]);
 
-      
       if (rows.length > 0) {
-        const user = rows[0];        
+        const user = rows[0];
         const validPassword = await HelpersCrypt.comparePassword(
           password,
           user.password
         );
-        
-        if (validPassword === true) {        
-          console.log("Usuario correcto");
+
+        if (validPassword === true) {
+          console.log("Usuario correcto");          
           return done(null, user);
         } else {
           console.log("Clave invalida");
@@ -69,14 +82,3 @@ passport.use(
     }
   )
 );
-
-passport.serializeUser((user, done) => {
-  console.log("serializeUser", user)
-  done(null, user);
-});
-
-passport.deserializeUser(async (id, done) => {
-  console.log("deserializeUser")
-  const rows = await pool.query("SELECT * FROM users WHERE id=?", [id]);
-  done(null, rows[0]);
-});

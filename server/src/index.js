@@ -29,8 +29,9 @@ app.use(cors());
 app.use(
   session({
     secret: "mi secretro vendo descartables",
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true },
     store: new MySQLStore({
       host: "localhost",
       port: "3306",
