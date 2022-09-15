@@ -6,10 +6,8 @@ import indexRoutes from "./routes/index.routes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import { userRoutes } from "./routes/userRoutes.js";
 
-import cookieParser from "cookie-parser";
 import passport from "passport";
 import session from "express-session";
-import csurf from "csurf";
 import MySQLStore from "express-mysql-session";
 
 import "./lib/PassportLocalStrategy.js";
@@ -21,10 +19,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-//app.use(cookieParser("mi secretro vendo descartables"));
 app.use(cors());
-
-//Session configuracion
 
 app.use(
   session({

@@ -17,9 +17,10 @@ const UsuarioContextProvider = (props) => {
   const [usuarios, setUsuarios] = useState([]);
 
   const loguearUsuario = async (values) => {
+    console.log("LoguearUsuario")
     try {
       const result = await axios.post("http://localhost:4000/signin", values);
-      console.log(result);
+      console.log("result: ",result);
     } catch (error) {
       console.log(error);
     }

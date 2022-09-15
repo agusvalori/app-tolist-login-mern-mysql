@@ -23,7 +23,7 @@ export const HomePage = () => {
       <Box>
         <Button
           onClick={() =>
-            loguearUsuario({ username: "dalinamaiz22", password: "clave1"})
+            loguearUsuario({ username: "dalinamaiz222", password: "clave1"})
           }
         >
           Iniciar Sesion
