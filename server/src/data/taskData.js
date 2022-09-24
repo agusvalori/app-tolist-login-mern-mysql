@@ -11,10 +11,21 @@ const agregarTarea = async (req, res) => {
 
 const obtenerTareas = async (req, res) => {
   try {
+    console.log(req.flash("users"));
+    console.log("obtenerTareas: ", req.query);
+    console.log("obtenerTareas: ", req.flash("user"));
     const [rows] = await pool.query("SELECT * FROM tareas");
     res.send(rows);
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+const obtenerTareasXUsuario = async (req, res) => {
+  try {
+    console.log(req.params)    
+  } catch (error) {
+    
   }
 };
 
@@ -65,6 +76,7 @@ export {
   agregarTarea,
   obtenerTareas,
   obtenerTareaXId,
+  obtenerTareasXUsuario,
   editarTarea,
   eliminarTarea,
 };

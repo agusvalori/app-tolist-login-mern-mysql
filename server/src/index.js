@@ -9,14 +9,17 @@ import { userRoutes } from "./routes/userRoutes.js";
 import passport from "passport";
 import session from "express-session";
 import MySQLStore from "express-mysql-session";
+import flash from "connect-flash";
 
 import "./lib/PassportLocalStrategy.js";
+import cookieParser from "cookie-parser";
 
 //Inicializaciones
 const app = express();
 
 //Middlewares
 app.use(morgan("dev"));
+app.use(cookieParser('keyboard cat'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
@@ -26,7 +29,7 @@ app.use(
     secret: "mi secretro vendo descartables",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true },
+    cookie: { secure: true, maxAge: 60000 },
     store: new MySQLStore({
       host: "localhost",
       port: "3306",
@@ -39,8 +42,10 @@ app.use(
 );
 
 //Passport configuracion
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 //Routes
 app.use(indexRoutes);

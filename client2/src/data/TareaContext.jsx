@@ -23,6 +23,10 @@ const TareaContextProvider = (props) => {
     }
   };
 
+  const obtenerTareasXUsuario = async (user) => {
+   
+  };
+
   const agregarTareas = async (values) => {
     try {
       await axios.post("http://localhost:4000/task", values);
@@ -59,6 +63,7 @@ const TareaContextProvider = (props) => {
         tareas,
         setTareas,
         obtenerTareas,
+        obtenerTareasXUsuario,
         agregarTareas,
         eliminarTareas,
         editarTareas,

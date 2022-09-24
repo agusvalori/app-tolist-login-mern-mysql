@@ -3,7 +3,7 @@ import { Paper, Box, Typography, Button } from "@mui/material";
 import { useUser } from "../../../data/UsuarioContext";
 
 export const HomePage = () => {
-  const { loguearUsuario } = useUser();
+  const { usuarios } = useUser();  
   return (
     <Paper
       sx={{
@@ -19,15 +19,7 @@ export const HomePage = () => {
         <Typography variant="h4">Bienvenido</Typography>
         <Typography variant="h4">a</Typography>
         <Typography variant="h5">Lista de Tareas</Typography>
-      </Box>
-      <Box>
-        <Button
-          onClick={() =>
-            loguearUsuario({ username: "dalinamaiz222", password: "clave1"})
-          }
-        >
-          Iniciar Sesion
-        </Button>
+        <Typography variant="h5">usuario: {usuarios?.name}</Typography>
       </Box>
     </Paper>
   );
