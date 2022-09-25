@@ -2,9 +2,6 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { PORT } from "./config.js";
-import indexRoutes from "./routes/index.routes.js";
-import taskRoutes from "./routes/taskRoutes.js";
-import { userRoutes } from "./routes/userRoutes.js";
 
 import passport from "passport";
 import session from "express-session";
@@ -13,6 +10,10 @@ import flash from "connect-flash";
 
 import "./lib/PassportLocalStrategy.js";
 import cookieParser from "cookie-parser";
+import { authRoutes } from "./routes/authRoutes.js";
+import { homeRoutes } from "./routes/homeRoutes.js";
+import { taskRoutes } from "./routes/taskRoutes.js";
+import { userRoutes } from "./routes/userRoutes.js";
 
 //Inicializaciones
 const app = express();
@@ -28,7 +29,7 @@ app.use(
   session({
     secret: "mi secretro vendo descartables",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: { secure: true, maxAge: 60000 },
     store: new MySQLStore({
       host: "localhost",
@@ -48,9 +49,10 @@ app.use(passport.session());
 
 
 //Routes
-app.use(indexRoutes);
-app.use(userRoutes);
+app.use(authRoutes);
+app.use(homeRoutes);
 app.use(taskRoutes);
+app.use(userRoutes);
 
 //Iniciar servidor
 app.listen(PORT, () => {

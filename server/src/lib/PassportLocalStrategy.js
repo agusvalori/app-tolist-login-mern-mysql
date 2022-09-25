@@ -1,10 +1,12 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 import { pool } from "../data/db.js";
+import { obtenerUsuarioXUsername } from "../data/userData.js";
 import { HelpersCrypt } from "./HelpersCrypt.js";
 
 //Iniciar Sesion
-passport.use("local.signin",
+passport.use(
+  "local.signin",
   new Strategy(
     {
       usernameField: "username",
@@ -40,37 +42,6 @@ passport.use("local.signin",
   )
 );
 
-//Registrar usuario
-passport.use(
-  "local.signup",
-  new Strategy(
-    {
-      usernameField: "username",
-      passwordField: "password",
-      passReqToCallback: true,
-    },
-    async (req, username, password, done) => {
-      console.log("")
-      const { name, lastName, email, lastLogin, createdAt } = req.body;
-      const user = {
-        username,
-        password: await HelpersCrypt.encryptPassword(password),
-        name,
-        lastName,
-        email,
-      };
-      try {
-        const [result] = await pool.query("INSERT INTO users SET ?", [user]);
-        user.id = result.insertId;
-        return done(null, user);
-      } catch (error) {
-        console.log("Error PassportLocalStrategy");
-        return done(null, error);
-      }
-    }
-  )
-);
-
 passport.serializeUser((user, done) => {
   console.log("serializeUser");
   done(null, user);
@@ -79,5 +50,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (user, done) => {
   console.log("deserializeUser");
   const rows = await pool.query("SELECT * FROM users WHERE id=?", [user.id]);
+  req.session.user = rows[0];
   done(null, rows[0]);
 });

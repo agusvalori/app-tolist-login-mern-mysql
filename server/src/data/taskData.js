@@ -9,34 +9,16 @@ const agregarTarea = async (req, res) => {
   res.send({ id: result.insertId, title, description });
 };
 
-const obtenerTareas = async (req, res) => {
-  try {
-    console.log(req.flash("users"));
-    console.log("obtenerTareas: ", req.query);
-    console.log("obtenerTareas: ", req.flash("user"));
-    const [rows] = await pool.query("SELECT * FROM tareas");
-    res.send(rows);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
 
-const obtenerTareasXUsuario = async (req, res) => {
+const obtenerTareasXUsuario = async (req, res) => {    
   try {
-    console.log(req.params)    
-  } catch (error) {
-    
-  }
-};
-
-const obtenerTareaXId = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const [rows] = await pool.query("SELECT * FROM tareas WHERE id=?", [id]);
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "La tarea no existe" });
+    const { userID } = req.params;
+    const [rows] = await pool.query("SELECT * FROM tareas WHERE userId=?",[userID]);
+    if(rows.length!==0){
+      res.send(rows)
+    }else{
+      res.send(false)
     }
-    res.send(rows[0]);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -73,9 +55,7 @@ const eliminarTarea = async (req, res) => {
 };
 
 export {
-  agregarTarea,
-  obtenerTareas,
-  obtenerTareaXId,
+  agregarTarea,  
   obtenerTareasXUsuario,
   editarTarea,
   eliminarTarea,
