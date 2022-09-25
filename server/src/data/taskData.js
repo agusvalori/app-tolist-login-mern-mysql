@@ -1,26 +1,31 @@
 import { pool } from "./db.js";
 
 const agregarTarea = async (req, res) => {
-  const { title, description, fecha } = req.body;
+ try {
+  const { title, description, fecha, userId } = req.body;
   const [result] = await pool.query(
-    "INSERT INTO tareas(title, description) VALUES(?,?)",
-    [title, description]
+    "INSERT INTO tareas(title, description,userId) VALUES(?,?,?)",
+    [title, description, userId]
   );
-  res.send({ id: result.insertId, title, description });
+  res.send({ status: true,  message: "Tarea agregada correctamente", value:result.insertId});
+ } catch (error) {
+  return res.json({ status: false, message: error.message });
+}
 };
 
-
-const obtenerTareasXUsuario = async (req, res) => {    
+const obtenerTareasXUsuario = async (req, res) => {
   try {
     const { userID } = req.params;
-    const [rows] = await pool.query("SELECT * FROM tareas WHERE userId=?",[userID]);
-    if(rows.length!==0){
-      res.send(rows)
-    }else{
-      res.send(false)
+    const [rows] = await pool.query("SELECT * FROM tareas WHERE userId=?", [
+      userID,
+    ]);
+    if (rows.length !== 0) {
+      res.send(rows);
+    } else {
+      res.send(false);
     }
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.json({ status: false, message: error.message });
   }
 };
 
@@ -33,11 +38,11 @@ const editarTarea = async (req, res) => {
       id,
     ]);
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "La tarea no se pudo editar" });
+      return res.json({ status: false, message: "La tarea no se pudo editar" });
     }
     res.json({ message: "Tarea editada" });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.json({ status: false, message: error.message });
   }
 };
 
@@ -48,15 +53,10 @@ const eliminarTarea = async (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "La tarea no se pudo eliminar" });
     }
-    res.json({ message: "Tarea eliminada" });
+    res.json({ status: true, message: "Tarea eliminada" });
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    return res.json({ status: false, message: error.message });
   }
 };
 
-export {
-  agregarTarea,  
-  obtenerTareasXUsuario,
-  editarTarea,
-  eliminarTarea,
-};
+export { agregarTarea, obtenerTareasXUsuario, editarTarea, eliminarTarea };

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
+
 const AuthContext = createContext();
 
 const useAuth = () => {
@@ -20,4 +21,14 @@ const AuthContextProvider = (props) => {
   const signupUsuario = async (values) => {};
 
   const logoutUsuario = async (values) => {};
+
+
+  return (
+    <AuthContext.Provider value={{auth, loginUsuario, signupUsuario,logoutUsuario}}>
+      {props.children}
+    </AuthContext.Provider>
+  )
 };
+
+
+export {AuthContext, AuthContextProvider, useAuth}
