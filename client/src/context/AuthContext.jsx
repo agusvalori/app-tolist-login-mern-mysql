@@ -31,7 +31,17 @@ const AuthContextProvider = (props) => {
     } catch (error) {}
   };
 
-  const signupUsuario = async (values) => {};
+  const signupUsuario = async (values) => {
+    try {
+      const result = await axios.post("http://localhost:4000/signup", values);      
+      if (result?.data?.isAuthenticated && result?.data?.id) {
+        setAuth({
+          isAuthenticated: result?.data?.isAuthenticated,
+          userId: result?.data?.id,
+        });
+      }
+    } catch (error) {}
+  };
 
   const logoutUsuario = async (values) => {};
 

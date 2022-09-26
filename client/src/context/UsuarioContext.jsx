@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useContext, useState } from "react";
 
 const UsuarioContext = createContext();
@@ -15,34 +16,117 @@ const useUsuario = () => {
 const UsuarioContextProvider = (props) => {
   const [usuarios, setUsuarios] = useState([]);
 
-  const crearUsuario = async (values) => {};  
+  const crearUsuario = async (values) => {};
 
-  const obtenerUsuariosXId = async (values) => {};
+  const obtenerUsuariosXId = async (values) => {
+    try {
+      const result = await axios.get(
+        "http://localhost:4000/user/username/",
+        values
+      );
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const obtenerUsuariosXUsername = async (values) => {};
+  const obtenerUsuariosXUsername = async (username) => {
+    try {
+      const result = await axios.get(
+        "http://localhost:4000/user/username/" + username
+      );
+      if (result.data) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
 
-  const obtenerUsuariosXEmail = async (values) => {};
+  const obtenerUsuariosXEmail = async (email) => {
+    try {
+      const result = await axios.get(
+        "http://localhost:4000/user/email/" + email
+      );
+      if (result.data) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
 
   const validarUsuario = async (values) => {
     const { username, password, email, name, lastname } = values;
     const result = [];
     //Validamos Username
     if (username.length == 0) {
-      result.push({ atributo: "username", message: "Usuario Vacio" });
-    }else{
-      
+      result.push({ atributo: "username", message: "Usuario vacio" });
+    } else {
+      if (username.includes(" ")) {
+        result.push({
+          atributo: "username",
+          message: "Usuario tiene un espacio",
+        });
+      } else if (await obtenerUsuariosXUsername(username)) {
+        result.push({
+          atributo: "username",
+          message: "Usuario en uso",
+        });
+      }
     }
     //Validamos Password
     if (password.length == 0) {
-      result.push({ atributo: "Contraseña", message: "Usuario Vacio" });
+      result.push({ atributo: "password", message: "Contraseña Vacia" });
+    } else {
+      if (password.includes(" ")) {
+        result.push({
+          atributo: "password",
+          message: "Contraseña tiene un espacio",
+        });
+      }
     }
     //Validamos Email
     if (email.length == 0) {
-      result.push({ atributo: "Email", message: "Usuario Vacio" });
+      result.push({ atributo: "email", message: "Email Vacio" });
+    } else {
+      if (email.includes(" ")) {
+        result.push({
+          atributo: "email",
+          message: "Email tiene un espacio",
+        });
+      } else if (await obtenerUsuariosXEmail(email)) {
+        result.push({
+          atributo: "email",
+          message: "Email en uso",
+        });
+      }
     }
-    //Validamos Nombre
-    //Validamos Apellido
 
+    //Validamos Nombre
+    if (name.length != 0) {
+      if (/\d/.test(name)) {
+        result.push({
+          atributo: "name",
+          message: "Nombre tiene numeros",
+        });
+      }
+    }
+    //Validamos Apellido
+    if (lastname.length != 0) {
+      if (/\d/.test(lastname)) {
+        result.push({
+          atributo: "lastname",
+          message: "Apellido tiene numeros",
+        });
+      }
+    }
     return result;
   };
 
@@ -51,7 +135,7 @@ const UsuarioContextProvider = (props) => {
       value={{
         usuarios,
         setUsuarios,
-        crearUsuario,        
+        crearUsuario,
         obtenerUsuariosXId,
         obtenerUsuariosXEmail,
         obtenerUsuariosXUsername,

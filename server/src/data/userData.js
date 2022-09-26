@@ -43,12 +43,12 @@ const obtenerUsuarioXId = async (req, res) => {
     return res.send(false);
   } else {
     //el id ya existe
-    return res.send(result[0]);
+    return res.send({ ...result[0], isAuthenticated: true });
   }
 };
 
-const obtenerUsuarioXUsername = async (req, res) => {
-  const { username } = req.params;
+const obtenerUsuarioXUsername = async (req, res) => {  
+  const { username } = req.params;  
   const [rows] = await pool.query(
     "SELECT id,username,email,name,lastname,lastLogin,createdAt,verifyEmail  FROM users WHERE username=?",
     [username]

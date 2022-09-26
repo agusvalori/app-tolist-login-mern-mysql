@@ -1,7 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 import { pool } from "../data/db.js";
-import { obtenerUsuarioXUsername } from "../data/userData.js";
 import { HelpersCrypt } from "./HelpersCrypt.js";
 
 //Iniciar Sesion
