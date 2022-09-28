@@ -38,7 +38,7 @@ const AuthContextProvider = (props) => {
         setAuth({
           isAuthenticated: result?.data?.isAuthenticated,
           userId: result?.data?.id,
-        });
+        });        
       }
     } catch (error) {}
   };

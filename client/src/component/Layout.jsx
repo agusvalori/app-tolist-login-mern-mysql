@@ -9,13 +9,20 @@ import { TaskPage } from "./pages/tareas/TaskPage";
 import { AboutPage } from "./pages/about/AboutPage";
 import { NotFound } from "./pages/notFound/NotFound";
 import { NavBar } from "./nav/NavBar";
+import { TareaContextProvider } from "../context/TareaContext";
+import { useUsuario } from "../context/UsuarioContext";
 
 export const Layout = () => {
   const { auth } = useAuth();
 
   const IsAuthenticated = () => {
+    const { obtenerUsuariosXId } = useUsuario();
+    
+    useEffect(() => {      
+      obtenerUsuariosXId(auth?.userId)      
+    }, []);
     return (
-      <>
+      <TareaContextProvider>
         <NavBar />
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -23,7 +30,7 @@ export const Layout = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </>
+      </TareaContextProvider>
     );
   };
 
