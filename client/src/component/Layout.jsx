@@ -17,9 +17,9 @@ export const Layout = () => {
 
   const IsAuthenticated = () => {
     const { obtenerUsuariosXId } = useUsuario();
-    
+
     useEffect(() => {      
-      obtenerUsuariosXId(auth?.userId)      
+      obtenerUsuariosXId(auth?.userId);
     }, []);
     return (
       <TareaContextProvider>

@@ -18,11 +18,10 @@ const UsuarioContextProvider = (props) => {
 
   const crearUsuario = async (values) => {};
 
-  const obtenerUsuariosXId = async (id) => {
-    console.log("obtenerUsuariosXId: ", id);
+  const obtenerUsuariosXId = async (id) => {    
     try {
       const result = await axios.get("http://localhost:4000/user/" + id);
-      console.log("obtenerUsuariosXId: ", result);
+      setUsuarios(result?.data)
     } catch (error) {
       console.log(error);
     }
