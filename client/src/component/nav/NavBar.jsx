@@ -9,6 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { PerfilPage } from "../pages/perfil/PerfilPage";
 
 export const NavBar = () => {
   return (
@@ -48,9 +49,7 @@ export const NavBar = () => {
           >
             About
           </Typography>
-          <IconButton sx={{backgroundColor:"rgba(150, 150, 150, 0.2)"}} >
-            <AccountCircleIcon fontSize="large" sx={{color:'white'}} />
-          </IconButton>
+          <PerfilPage />
         </Toolbar>
       </AppBar>
     </Box>

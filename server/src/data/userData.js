@@ -116,6 +116,15 @@ const editarUsuario = async (req, res) => {
   }
 };
 
+const cambiarPassword = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+  } catch (error) {
+    res.send({ status: false, message: error.message });
+  }
+};
+
 export {
   crearUsuario,
   obtenerUsuarioXId,
