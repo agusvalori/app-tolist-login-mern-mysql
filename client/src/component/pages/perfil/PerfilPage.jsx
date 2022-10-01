@@ -16,8 +16,14 @@ import dayjs from "dayjs";
 
 export const PerfilPage = () => {
   const [open, setOpen] = useState(false);
+  const initialValues = {
+    currentPassword: "",
+    newPassword: "",
+    repeatNewPassword: "",
+  };
+  const [values, setValues] = useState(initialValues);
   const [changePass, setChangePass] = useState(true);
-  const { usuarios } = useUsuario();
+  const { usuarios, actualizarPassword, validarPassword } = useUsuario();
 
   const handleChangeCheckBok = (event) => {
     const { checked } = event.target;
@@ -26,7 +32,7 @@ export const PerfilPage = () => {
 
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
-    console.log(name, value);
+    setValues({ ...values, [name]: value });
   };
 
   const handleClose = () => {
@@ -34,8 +40,15 @@ export const PerfilPage = () => {
     setChangePass(true);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();    
+    const validacion = await validarPassword(values);    
+    if (validacion.length === 0) {
+      const res = await actualizarPassword(values, usuarios.id);
+      console.log("actualizarPassword: ",res)
+    } else {
+      console.log("No se pudo actualizar por....", validacion);
+    }
   };
 
   return (
@@ -129,24 +142,29 @@ export const PerfilPage = () => {
                 onChange={(event) => handleChangeCheckBok(event)}
               />
             </Box>
-            <form>
+            <form onSubmit={() => handleSubmit(event)}>
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <TextField
+                  onChange={(event) => handleChangeInput(event)}
                   disabled={changePass}
                   name="currentPassword"
                   label="Clave Actual"
                 />
                 <TextField
+                  onChange={(event) => handleChangeInput(event)}
                   disabled={changePass}
                   name="newPassword"
                   label="Nueva clave"
                 />
                 <TextField
+                  onChange={(event) => handleChangeInput(event)}
                   disabled={changePass}
                   name="repeatNewPassword"
                   label="Repita la Clave Nueva"
                 />
-                <Button disabled={changePass}>Cambiar contraseña</Button>
+                <Button type={"submit"} disabled={changePass}>
+                  Cambiar contraseña
+                </Button>
               </Box>
             </form>
           </Box>

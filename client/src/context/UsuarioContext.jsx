@@ -18,10 +18,10 @@ const UsuarioContextProvider = (props) => {
 
   const crearUsuario = async (values) => {};
 
-  const obtenerUsuariosXId = async (id) => {    
+  const obtenerUsuariosXId = async (id) => {
     try {
       const result = await axios.get("http://localhost:4000/user/" + id);
-      setUsuarios(result?.data)
+      setUsuarios(result?.data);
     } catch (error) {
       console.log(error);
     }
@@ -56,6 +56,18 @@ const UsuarioContextProvider = (props) => {
     } catch (error) {
       console.log(error);
       return false;
+    }
+  };
+
+  const actualizarPassword = async (password, userId) => {
+    try {
+      const res = await axios.put(
+        "http://localhost:4000/user/password/" + userId,
+        password
+      );      
+      return { status: res.data.status, data: res.data };
+    } catch (error) {
+      return { status: false, data: error };
     }
   };
 
@@ -127,6 +139,37 @@ const UsuarioContextProvider = (props) => {
     return result;
   };
 
+  const validarPassword = async (password) => {
+    const { currentPassword, newPassword, repeatNewPassword } = password;
+    let result = [];
+    //Validamos Password
+    if (newPassword.length == 0) {
+      result.push({
+        atributo: "newPassword",
+        message: "Contraseña nueva vacia",
+      });
+    } else {
+      if (newPassword === repeatNewPassword) {
+        if (newPassword.includes(" ")) {
+          result.push({
+            atributo: "newPassword",
+            message: "Contraseña nueva tiene un espacio",
+          });
+        }
+      } else {
+        result.push({
+          atributo: "newPassword",
+          message: "las contraseñas nuevas no coinciden",
+        });
+        result.push({
+          atributo: "repeatNewPassword",
+          message: "las contraseñas nuevas no coinciden",
+        });
+      }
+    }
+    return result;
+  };
+
   return (
     <UsuarioContext.Provider
       value={{
@@ -136,7 +179,9 @@ const UsuarioContextProvider = (props) => {
         obtenerUsuariosXId,
         obtenerUsuariosXEmail,
         obtenerUsuariosXUsername,
+        actualizarPassword,
         validarUsuario,
+        validarPassword,
       }}
     >
       {props.children}
